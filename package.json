@@ -1,0 +1,24 @@
+{
+  "name": "react-powerfull-cli",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "bin": {
+    "rpc": "./dist/index.js"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.1",
+    "typescript": "^5.8.3"
+  },
+  "private": true,
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^14.0.0",
+    "inquirer": "^12.6.3"
+  }
+}
