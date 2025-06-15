@@ -24,7 +24,7 @@ function writeToConfig(obj: Partial<ConfigTypes>){
         }
     }
 
-    fs.writeFileSync(configPath, JSON.stringify(currentConfig, null, 2));
+    fs.writeFileSync(configPath, JSON.stringify(currentConfig, null, 4));
 }
 
 
