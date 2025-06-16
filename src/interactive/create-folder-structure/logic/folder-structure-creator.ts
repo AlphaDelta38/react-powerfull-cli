@@ -1,12 +1,10 @@
 import type { IProjectSizeType } from "../../../types/config.types.js";
-import { readFromConfig } from "../../../utils/config-utils.js";
+import {fromConfigToPath, readFromConfig} from "../../../utils/config-utils.js";
 import { createFolder } from "../../../utils/file-utils.js";
 import { isObject } from "../../../utils/utils.js";
 import { setToNewStructure, structureToConfig } from "./structure-to-config.js";
 
-interface counter{
-    [key: string]: number
-}
+import type { Counter } from '../../../types/types.js'
 
 const project: IProjectSizeType = {
     small: {
@@ -54,7 +52,7 @@ function FolderStructureCreator(size: 'large' | 'middle' | 'small', reWrite: boo
     reWrite = readFromConfig()?.structure === undefined ? true : reWrite
 
 
-    const counter: counter = {}
+    const counter: Counter = {}
     let path = ""
     let item = null;
 
@@ -71,7 +69,6 @@ function FolderStructureCreator(size: 'large' | 'middle' | 'small', reWrite: boo
             }else if(lastKey !== undefined){
                 counter[lastKey] = counter[lastKey] - 1;
             }
-
         }
 
         if(typeof value === "string"){

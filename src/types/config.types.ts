@@ -41,5 +41,13 @@ export interface IProjectSizeType {
 export interface ConfigTypes{
     rootDir: string,
     structure?: IProjectSizeType | any
+    generationPaths?: {
+        [key: string]: string
+    }
+}
+
+
+export interface IPathResult{
+    [key: string]: string | null | IPathResult
 }
 
