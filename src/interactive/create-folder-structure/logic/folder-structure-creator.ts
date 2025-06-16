@@ -105,7 +105,10 @@ function FolderStructureCreator(size: 'large' | 'middle' | 'small', reWrite: boo
 
     }
 
-    structureToConfig()
+    if(reWrite){
+        structureToConfig()
+    }
+
 }
 
 

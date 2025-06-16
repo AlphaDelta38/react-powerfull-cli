@@ -14,6 +14,7 @@ function createConfig() {
 
 function writeToConfig(obj: Partial<ConfigTypes>){
     if(!configPath) return;
+
     const currentConfig = readFromConfig()
     const entries = Object.entries(obj)
 

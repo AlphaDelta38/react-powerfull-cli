@@ -2,6 +2,7 @@
 import { Command } from 'commander';
 import createFolderStructure from "./interactive/create-folder-structure/index.js";
 import { createConfig } from './utils/config-utils.js'
+import {createStructureCommand} from "./command/create-structure.js";
 
 createConfig()
 
@@ -12,6 +13,7 @@ program
     .description('React CLI for management folders, and use template')
     .version('0.1.0');
 
+createStructureCommand()
 
 createFolderStructure()
 
