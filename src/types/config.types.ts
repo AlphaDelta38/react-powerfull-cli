@@ -43,7 +43,8 @@ export interface ConfigTypes{
     structure?: IProjectSizeType | any
     generationPaths?: {
         [key: string]: string
-    }
+    },
+    [key: string]: any
 }
 
 

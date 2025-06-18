@@ -1,7 +1,7 @@
 import { program } from "../../index.js";
 import UnitedActions from "./actions/index.js";
 
-function createFolderStructure(){
+function initFolderStructure(){
 
     program
         .command('create')
@@ -11,4 +11,4 @@ function createFolderStructure(){
 
 }
 
-export default createFolderStructure;
+export default initFolderStructure;

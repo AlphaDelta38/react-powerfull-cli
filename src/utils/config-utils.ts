@@ -1,111 +1,108 @@
-import path from "node:path";
-import * as fs from "node:fs";
-import type {ConfigTypes, IPathResult} from "../types/config.types.js";
-import { isObject } from "./utils.js";
-import type { Counter } from "../types/types.js";
+import fs from 'fs-extra';
+import path from 'node:path';
+import { isObject } from './utils.js';
+import type { ConfigTypes, IPathResult } from '../types/config.types.js';
+import type { Counter } from '../types/types.js';
 
-const configPath: string = path.resolve(process.cwd(), 'rpc.config.json');
+export class ConfigManager {
+    private readonly configPath: string;
 
-
-function createConfig() {
-    if(!fs.existsSync(configPath)){
-        fs.writeFileSync(configPath, '{}', 'utf-8');
+    constructor(configFileName = 'rpc.config.json') {
+        this.configPath = path.resolve(process.cwd(), configFileName);
     }
-}
 
+    createConfig() {
+        if (!fs.existsSync(this.configPath)) {
+            fs.writeFileSync(this.configPath, '{}', 'utf-8');
+        }
+    }
 
-function writeToConfig(obj: Partial<ConfigTypes>){
-    if(!configPath) return;
+    read(): ConfigTypes {
+        if (!this.configPath) {
+            throw new Error(`Config file not found at ${this.configPath}`);
+        }
+        return fs.readJsonSync(this.configPath);
+    }
 
-    const currentConfig = readFromConfig()
-    const entries = Object.entries(obj)
-
-    if(Object.entries(obj).length > 0){
-        for (const [key, value] of entries) {
-            // @ts-ignore
+    write(obj: Partial<ConfigTypes>) {
+        const currentConfig = this.read();
+        for (const [key, value] of Object.entries(obj)) {
             currentConfig[key] = value;
         }
+
+        fs.writeJsonSync(this.configPath, currentConfig, { spaces: 4 });
     }
 
-    fs.writeFileSync(configPath, JSON.stringify(currentConfig, null, 4));
-}
+    extractPaths(keys: string[]): IPathResult {
+        const config = this.read();
+        const generationPaths = config.generationPaths;
+        const structure = generationPaths ?? config.structure;
 
+        const result: IPathResult = {};
+        const counter: Counter = {};
+        const stack = [...Object.entries(structure)];
+        let path = '';
 
-function readFromConfig(): ConfigTypes {
-    if (!configPath) {
-        throw new Error(`Config file not found at ${configPath}`);
-    }
-    const raw = fs.readFileSync(configPath, 'utf-8');
-
-    return JSON.parse(raw) as ConfigTypes;
-}
-
-
-function fromConfigToPath(keys: string[]) {
-    const generationPaths = readFromConfig()?.generationPaths
-    const structure =  generationPaths ?? readFromConfig().structure
-
-    const stack = [...Object.entries(structure)]
-    const result: IPathResult  = {}
-    const counter: Counter = {}
-
-    if(generationPaths){
-        const items = Object.entries(generationPaths)
-        for (const [key, value] of items) {
-            result[key] = value
-        }
-    }
-
-
-    let path = ""
-
-    while (stack.length) {
-        const [key, value] = stack.pop()!;
-
-        if(path !== ""){
-            const lastKey = path.split("/").pop();
-
-            if(lastKey !== undefined && counter[lastKey] === 0){
-                const regex = new RegExp(`\/?${lastKey}`, 'i');
-                path = path.replace(regex, "");
-            }else if(lastKey !== undefined){
-                counter[lastKey] = counter[lastKey] - 1;
+        if (generationPaths) {
+            for (const [key, value] of Object.entries(generationPaths)) {
+                result[key] = value;
             }
         }
 
-        if(typeof value === "string" && keys.includes(key)){
-            result[key] = value
-            path = ""
-            continue;
-        }
+        while (stack.length) {
+            const [key, value] = stack.pop()!;
 
-        if(isObject(value)){
-            const items = Object.entries(value)
-            for (const item of items) {
-                stack.push(item)
+            if (path !== '') {
+                const lastKey = path.split('/').pop();
+                if (lastKey !== undefined && counter[lastKey] === 0) {
+                    const regex = new RegExp(`/?${lastKey}`, 'i');
+                    path = path.replace(regex, '');
+                } else if (lastKey !== undefined) {
+                    counter[lastKey] = counter[lastKey] - 1;
+                }
             }
 
-            path += path === "" ? key : "/" + key
+            if (typeof value === 'string' && keys.includes(key)) {
+                result[key] = value;
+                path = '';
+                continue;
+            }
 
-            counter[key] = items.length
-            continue;
+            if (isObject(value)) {
+                const items = Object.entries(value);
+                for (const item of items) {
+                    stack.push(item);
+                }
+
+                path += path === '' ? key : '/' + key;
+                counter[key] = items.length;
+                continue;
+            }
+
+            if (keys.includes(key) && !result[key]) {
+                result[key] = path;
+            }
         }
 
-
-        if(keys.includes(key) && !result[key]){
-            result[key] = path
-        }
-
+        return result;
     }
-
-    return result;
 }
 
 
+
+
+const configManagerCache: Record<string, ConfigManager> = {};
+
+function getInstanceConfigManager(path: string): ConfigManager {
+    if (!configManagerCache[path]) {
+        configManagerCache[path] = new ConfigManager(path);
+    }
+    return configManagerCache[path];
+}
+
+const GeneralConfigManager = new ConfigManager();
 
 export {
-    createConfig,
-    writeToConfig,
-    readFromConfig,
-    fromConfigToPath
+    getInstanceConfigManager,
+    GeneralConfigManager
 }

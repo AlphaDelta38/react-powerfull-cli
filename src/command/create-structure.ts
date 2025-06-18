@@ -1,7 +1,7 @@
 import { program } from "../index.js";
 import folderStructureCreator from "../interactive/create-folder-structure/logic/folder-structure-creator.js";
 
-function createStructureCommand(){
+function initStructureCommand(){
     return program
         .command('create-structure')
         .alias('create-st')
@@ -10,7 +10,6 @@ function createStructureCommand(){
         .action((options)=>folderStructureCreator("large", options["rewrite"]));
 }
 
-
 export {
-    createStructureCommand
+    initStructureCommand
 }

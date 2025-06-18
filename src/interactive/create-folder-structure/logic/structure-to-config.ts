@@ -1,4 +1,5 @@
-import { writeToConfig } from "../../../utils/config-utils.js";
+import { GeneralConfigManager } from "../../../utils/config-utils.js";
+
 
 
 interface newStructure {
@@ -31,7 +32,7 @@ function setToNewStructure(path: string): void {
 }
 
 function structureToConfig(){
-    writeToConfig({structure: newStructure})
+    GeneralConfigManager.write({structure: newStructure})
 }
 
 export {
