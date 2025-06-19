@@ -14,12 +14,14 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^24.0.1",
+    "@types/ejs": "^3.1.5",
     "typescript": "^5.8.3"
   },
   "private": true,
   "dependencies": {
     "chalk": "^5.4.1",
     "commander": "^14.0.0",
+    "ejs": "^3.1.10",
     "fs-extra": "^11.3.0",
     "inquirer": "^12.6.3"
   }

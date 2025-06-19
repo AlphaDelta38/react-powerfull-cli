@@ -27,6 +27,12 @@ async function settings() {
             message: 'Choose the type of file in project:',
             choices: ['javascript', 'typescript'],
         },
+        {
+            type: 'input',
+            name: 'css-type',
+            message: 'Enter the type of css preprocessor or use default:',
+            default: "css"
+        },
     ])
 }
 
