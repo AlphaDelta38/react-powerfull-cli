@@ -44,11 +44,13 @@ export interface ConfigTypes{
     generationPaths?: {
         [key: string]: string
     },
+    useTypescript: boolean,
+    "css-type": string,
+
     [key: string]: any
 }
 
 
 export interface IPathResult{
-    [key: string]: string | null | IPathResult
+    [key: string]: string
 }
-

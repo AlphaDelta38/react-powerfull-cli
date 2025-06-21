@@ -22,10 +22,9 @@ async function settings() {
             }
         },
         {
-            type: 'list',
-            name: 'type',
+            type: 'confirm',
+            name: 'useTypescript',
             message: 'Choose the type of file in project:',
-            choices: ['javascript', 'typescript'],
         },
         {
             type: 'input',

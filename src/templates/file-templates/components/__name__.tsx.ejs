@@ -1,0 +1,26 @@
+import React from 'react';
+<% if (useCSS) { -%>
+import styles from './<%= name %>.module.<%= cssType %>';
+<% } -%>
+
+<% if (useTypescript && useInterface) { -%>
+interface <%= name %>Props {
+<% if (componentType === 'fc') { -%>
+    children?: React.ReactNode;
+<% } -%>
+}
+<% } -%>
+
+<% if (componentType === 'fr') { -%>
+export const <%= name %> = React.forwardRef<% if (useTypescript && useInterface) { %><any, <%= name %>Props><% } %>(({}, ref) => {
+    return <main<% if (useCSS) { %> className={styles.main}<% } %>></main>;
+});
+<% } else if (componentType === 'fc') { -%>
+export const <%= name %><% if (useTypescript && useInterface) { %>: React.FC<<%= name %>Props><% } %> = ({ children, ...props }<% if (useTypescript && useInterface) { %>: <%= name %>Props<% } %>) => {
+    return <main<% if (useCSS) { %> className={styles.main}<% } %>>{children}</main>;
+};
+    <% } else if (componentType === 'fn') { -%>
+export const <%= name %> = ({}<% if (useTypescript && useInterface) { %>: <%= name %>Props<% } %>) => {
+    return <main<% if (useCSS) { %> className={styles.main}<% } %>></main>;
+};
+<% } -%>

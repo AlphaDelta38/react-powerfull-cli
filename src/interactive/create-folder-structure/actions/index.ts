@@ -2,7 +2,7 @@ import chalk from "chalk";
 import sizeAnswer from './choose-size.js'
 import settingsAnswer from './project-settings.js'
 import folderStructureCreator from "../logic/folder-structure-creator.js";
-import { GeneralConfigManager } from "../../../utils/config-utils.js";
+import { GeneralConfigManager } from "@/utils/config-utils.js";
 
 async function UnitedActions(){
     console.log(chalk.cyanBright('Initialize project settings...\n'));

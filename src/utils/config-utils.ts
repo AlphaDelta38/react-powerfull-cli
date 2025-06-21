@@ -1,8 +1,10 @@
 import fs from 'fs-extra';
 import path from 'node:path';
 import { isObject } from './utils.js';
-import type { ConfigTypes, IPathResult } from '../types/config.types.js';
-import type { Counter } from '../types/types.js';
+import * as process from "node:process";
+
+import type { ConfigTypes, IPathResult } from '@/types/config.types.js';
+import type { Counter } from '@/types/types.js';
 
 export class ConfigManager {
     private readonly configPath: string;
@@ -33,15 +35,19 @@ export class ConfigManager {
         fs.writeJsonSync(this.configPath, currentConfig, { spaces: 4 });
     }
 
-    extractPaths(keys: string[]): IPathResult {
+    extractPaths(keys: string[]): string[] {
         const config = this.read();
         const generationPaths = config.generationPaths;
-        const structure = generationPaths ?? config.structure;
+        const structure = generationPaths ?? config?.structure;
+
+        if(!structure && !generationPaths){
+            return [process.cwd()];
+        }
 
         const result: IPathResult = {};
         const counter: Counter = {};
         const stack = [...Object.entries(structure)];
-        let path = '';
+        let tempPath = '';
 
         if (generationPaths) {
             for (const [key, value] of Object.entries(generationPaths)) {
@@ -52,11 +58,11 @@ export class ConfigManager {
         while (stack.length) {
             const [key, value] = stack.pop()!;
 
-            if (path !== '') {
-                const lastKey = path.split('/').pop();
+            if (tempPath !== '') {
+                const lastKey = tempPath.split('/').pop();
                 if (lastKey !== undefined && counter[lastKey] === 0) {
                     const regex = new RegExp(`/?${lastKey}`, 'i');
-                    path = path.replace(regex, '');
+                    tempPath = tempPath.replace(regex, '');
                 } else if (lastKey !== undefined) {
                     counter[lastKey] = counter[lastKey] - 1;
                 }
@@ -64,7 +70,7 @@ export class ConfigManager {
 
             if (typeof value === 'string' && keys.includes(key)) {
                 result[key] = value;
-                path = '';
+                tempPath = '';
                 continue;
             }
 
@@ -74,17 +80,21 @@ export class ConfigManager {
                     stack.push(item);
                 }
 
-                path += path === '' ? key : '/' + key;
+                tempPath += tempPath === '' ? key : '/' + key;
                 counter[key] = items.length;
                 continue;
             }
 
             if (keys.includes(key) && !result[key]) {
-                result[key] = path;
+                result[key] = tempPath;
             }
         }
 
-        return result;
+        if(Object.entries(result).length === 0){
+            return [process.cwd()];
+        }
+
+        return Object.entries(result).map(([key, value]) => path.join(value, key));
     }
 }
 

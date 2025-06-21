@@ -1,4 +1,4 @@
-import { program } from "../index.js";
+import { program } from "@/index.js";
 import folderStructureCreator from "../interactive/create-folder-structure/logic/folder-structure-creator.js";
 
 function initStructureCommand(){
