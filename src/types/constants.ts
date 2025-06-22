@@ -1,8 +1,7 @@
 
 interface ITemplatePathObj {
-    [key: string]: {
+    readonly [key: string]: {
         path: string,
-        allowProps: string[]
     };
 }
 

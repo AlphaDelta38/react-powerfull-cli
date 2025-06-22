@@ -3,14 +3,16 @@ import path from "node:path";
 import ejs from 'ejs'
 import { capitalizeFirstLetter } from '@/utils/text-utils.js'
 
-import type { generateProps } from "@/types/generate-props.js";
+import type { generateFunctionProps } from "@/templates/types/index.js";
 
 
-async function generateComponent(props: generateProps): Promise<void> {
+async function generateComponent(props: generateFunctionProps): Promise<void> {
     try {
+        props.name = capitalizeFirstLetter(props.name);
+
         const filename = props?.fileName ?? props.name
 
-        const dirPath = path.join(props.generatedPath, `${capitalizeFirstLetter(props.name)}`)
+        const dirPath = path.join(props.generatedPath, `${props.name}`)
         const outputFile = path.join(dirPath, `${filename}.${props.extension}`);
 
         const template = await fs.readFile(props.templatePath);
