@@ -20,7 +20,7 @@ export class ConfigManager {
     }
 
     read(): ConfigTypes {
-        if (!this.configPath) {
+        if (!fs.existsSync(this.configPath)) {
             throw new Error(`Config file not found at ${this.configPath}`);
         }
         return fs.readJsonSync(this.configPath);
@@ -41,7 +41,7 @@ export class ConfigManager {
         const structure = generationPaths ?? config?.structure;
 
         if(!structure && !generationPaths){
-            return [process.cwd()];
+            return ["."];
         }
 
         const result: IPathResult = {};
@@ -91,7 +91,7 @@ export class ConfigManager {
         }
 
         if(Object.entries(result).length === 0){
-            return [process.cwd()];
+            return ["."];
         }
 
         return Object.entries(result).map(([key, value]) => path.join(value, key));

@@ -1,0 +1,22 @@
+<%
+const hooks = ['useEffect'];
+if (usePrev || useClickOut) hooks.push('useRef')
+if (useDeb || useToggle) hooks.push('useState');
+-%>
+import React, { <%= hooks.join(', ') %> } from 'react';
+
+<% if (usePrev) { %>
+<%- include('partials/usePrevious', { useTypescript }) %>
+<% } -%>
+
+<% if (useDeb) { %>
+<%- include('partials/useDebounce', { useTypescript }) %>
+<% } -%>
+
+<% if (useClickOut) { %>
+<%- include('partials/useOnClickOutside', { useTypescript }) %>
+<% } -%>
+
+<% if (useToggle) { %>
+<%- include('partials/useToggle', { useTypescript }) %>
+<% } -%>

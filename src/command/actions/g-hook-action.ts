@@ -1,0 +1,49 @@
+import { GeneralConfigManager } from "@/utils/config-utils.js";
+import { filterObjectByKey } from "@/utils/utils.js";
+import { toCamelCase } from "@/utils/text-utils.js";
+import { hooks } from "@/constants/template-paths.js";
+import generate from "@/templates/generate.js";
+
+import type { customHookTemplateProps } from "@/templates/types/hooks.js";
+
+interface IOptions{
+    disableTypescript: boolean;
+    di: boolean;
+}
+
+async function generateHook(name:string, options: IOptions){
+    const componentDirPath: string = GeneralConfigManager.extractPaths(["hooks"])[0];
+    const useTypescript: boolean = options["disableTypescript"] ? false : GeneralConfigManager.read()?.useTypescript ?? true;
+
+    const { data } : Pick<customHookTemplateProps, "data"> = {
+        data: {
+            useTypescript: useTypescript,
+            useInterface: !options.di
+        }
+    };
+
+    const generateProps: customHookTemplateProps = {
+        name,
+        extension: "",
+        templatePath:"",
+        generatedPath: componentDirPath,
+        data
+    }
+
+    await createHook({
+        ...generateProps,
+        data: filterObjectByKey(generateProps.data, [
+            "useTypescript", "useInterface"
+        ])
+    })
+
+}
+
+async function createHook(generateProps: customHookTemplateProps){
+    const extension = generateProps.data.useTypescript ? "ts" : "js"
+    const camelCase = toCamelCase(generateProps.name, "-")
+
+    return generate({...generateProps, extension, name: camelCase, templatePath: hooks["custom"].path, fileName: `use${camelCase}` })
+}
+
+export default generateHook;

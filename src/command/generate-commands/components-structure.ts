@@ -2,7 +2,7 @@ import { Command } from "commander";
 import generateComponentsStructure from "@/command/actions/g-components-action.js";
 
 function createComponentsStructure(){
-    return new Command('component <name>')
+    return new Command('component')
         .alias("ct")
         .argument('<name>', 'Component name')
         .description('create component folder structure with file-templates')

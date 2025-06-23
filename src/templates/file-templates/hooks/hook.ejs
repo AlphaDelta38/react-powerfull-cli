@@ -1,0 +1,9 @@
+import { useEffect } from 'react';
+<% if(useTypescript && useInterface) { %>
+interface use<%= name %>Props {}
+<% } -%>
+
+export function use<%= name %>(options<% if(useTypescript) { %>?: use<%= name %>Props<% } %>)<% if(useTypescript) { %>: void<% } %> {
+    useEffect(() => {
+    }, []);
+}

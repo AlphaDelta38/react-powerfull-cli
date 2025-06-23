@@ -13,14 +13,14 @@ interface <%= name %>Props {
 
 <% if (componentType === 'fr') { -%>
 export const <%= name %> = React.forwardRef<% if (useTypescript && useInterface) { %><any, <%= name %>Props><% } %>(({}, ref) => {
-    return <main<% if (useCSS) { %> className={styles.main}<% } %>></main>;
+    return <div<% if (useCSS) { %> className={styles.main}<% } %>></div>;
 });
 <% } else if (componentType === 'fc') { -%>
 export const <%= name %><% if (useTypescript && useInterface) { %>: React.FC<<%= name %>Props><% } %> = ({ children, ...props }<% if (useTypescript && useInterface) { %>: <%= name %>Props<% } %>) => {
-    return <main<% if (useCSS) { %> className={styles.main}<% } %>>{children}</main>;
+    return <div<% if (useCSS) { %> className={styles.main}<% } %>>{children}</div>;
 };
     <% } else if (componentType === 'fn') { -%>
 export const <%= name %> = ({}<% if (useTypescript && useInterface) { %>: <%= name %>Props<% } %>) => {
-    return <main<% if (useCSS) { %> className={styles.main}<% } %>></main>;
+    return <div<% if (useCSS) { %> className={styles.main}<% } %>></div>;
 };
 <% } -%>

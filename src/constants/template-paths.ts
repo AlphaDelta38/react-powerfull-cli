@@ -1,12 +1,14 @@
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { resolve } from 'path';
+import { getDirname } from "@/utils/utils.js";
+
 import type { ITemplatePathObj } from "@/types/constants.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+const { __dirname } = getDirname(import.meta.url);
+
 
 const components: ITemplatePathObj = {
-    main: {
+    tsx: {
         path: resolve(__dirname, '../templates/file-templates/components/__name__.tsx.ejs'),
     },
     css: {
@@ -17,6 +19,16 @@ const components: ITemplatePathObj = {
     },
 }
 
+const hooks: ITemplatePathObj = {
+    usual: {
+        path: resolve(__dirname, '../templates/file-templates/hooks/usual/__name__.hooks.ejs'),
+    },
+    custom: {
+        path: resolve(__dirname, '../templates/file-templates/hooks/hook.ejs'),
+    },
+}
+
 export {
+    hooks,
     components
 };

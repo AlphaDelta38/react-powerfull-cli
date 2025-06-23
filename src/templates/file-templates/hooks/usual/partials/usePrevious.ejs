@@ -1,0 +1,10 @@
+
+export function usePrevious<% if (useTypescript) { %><T><% } %>(value<% if (useTypescript) { %>: T<% } %>)<% if (useTypescript) { %>: T | undefined<% } %>{
+    const ref = useRef<% if (useTypescript) { %><T><% } %>();
+
+    useEffect(() => {
+        ref.current = value;
+    }, [value]);
+
+    return ref.current;
+}

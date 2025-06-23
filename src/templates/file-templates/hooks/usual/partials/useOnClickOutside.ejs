@@ -1,0 +1,19 @@
+export function useOnClickOutside(
+        ref<% if (useTypescript) { %>: React.RefObject<HTMLElement><% } %>,
+        handler<% if (useTypescript) { %>: (event: MouseEvent | TouchEvent) => void<% } %>
+    ) {
+    useEffect(() => {
+        const listener = (event<% if (useTypescript) { %>: MouseEvent | TouchEvent<% } %>) => {
+            if (!ref.current || ref.current.contains(event.target<% if (useTypescript) { %> as Node<% } %>)) return;
+            handler(event);
+        };
+
+        document.addEventListener('mousedown', listener);
+        document.addEventListener('touchstart', listener);
+
+        return () => {
+            document.removeEventListener('mousedown', listener);
+            document.removeEventListener('touchstart', listener);
+        };
+    }, [ref, handler]);
+}

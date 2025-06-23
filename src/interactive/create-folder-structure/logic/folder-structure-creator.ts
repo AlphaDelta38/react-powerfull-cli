@@ -1,10 +1,10 @@
-import { GeneralConfigManager } from "../../../utils/config-utils.js";
-import type { IProjectSizeType } from "../../../types/config.types.js";
-import { createFolder } from "../../../utils/file-utils.js";
-import { isObject } from "../../../utils/utils.js";
+import { GeneralConfigManager } from "@/utils/config-utils.js";
+import type { IProjectSizeType } from "@/types/config.types.js";
+import { createFolder } from "@/utils/file-utils.js";
+import { isObject } from "@/utils/utils.js";
 import { setToNewStructure, structureToConfig } from "./structure-to-config.js";
 
-import type { Counter } from '../../../types/types.js'
+import type { Counter } from '@/types/types.js'
 
 
 const project: IProjectSizeType = {

@@ -1,5 +1,5 @@
 import type { Basic } from "@/templates/types/index.js";
-import {FromUtoI} from "@/types/types";
+import type {FromUtoI} from "@/types/types";
 
 interface tsxTemplateProps extends Basic {
     data: {
@@ -25,14 +25,14 @@ interface indexTemplateProps extends Basic {
     }
 }
 
+interface generateTypesForAction extends Basic{
+    data: FromUtoI<componentsAllDataTypes>
+}
+
 type componentsAllDataTypes =
     | cssTemplateProps['data']
     | tsxTemplateProps['data']
     | indexTemplateProps['data'];
-
-interface generateTypesForAction extends Basic{
-    data: FromUtoI<componentsAllDataTypes>
-}
 
 export {
     tsxTemplateProps,

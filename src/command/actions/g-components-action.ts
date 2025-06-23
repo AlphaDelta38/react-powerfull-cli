@@ -2,17 +2,16 @@ import generate from "@/templates/generate.js";
 
 import { filterObjectByKey } from "@/utils/utils.js";
 import { GeneralConfigManager } from "@/utils/config-utils.js";
+import { capitalizeFirstLetter } from "@/utils/text-utils.js";
 import { components } from "@/constants/template-paths.js";
 
-import type { generateFunctionProps } from "@/templates/types/index.js";
-
-import {
+import type {
     cssTemplateProps,
     indexTemplateProps,
     tsxTemplateProps,
     componentsAllDataTypes, generateTypesForAction
 } from "@/templates/types/components.js";
-import {FromUtoI} from "@/types/types";
+
 
 
 interface IOptions{
@@ -37,7 +36,7 @@ async function generateComponentsStructure(name: string, options: IOptions) {
     }
 
     const generateProps: generateTypesForAction = {
-        name,
+        name: capitalizeFirstLetter(name),
         extension: "",
         templatePath:"",
         generatedPath: componentDirPath,
@@ -74,19 +73,19 @@ async function generateComponentsStructure(name: string, options: IOptions) {
 function createTsx(generateProps: tsxTemplateProps){
     const extension = generateProps.data.useTypescript ? "tsx" : "jsx"
 
-    return generate({...generateProps, extension: extension, templatePath: components["main"].path})
+    return generate({...generateProps, extension: extension, templatePath: components["tsx"].path}, true)
 }
 
 function createCSS(generateProps: cssTemplateProps){
     if(!generateProps.data.useCSS) return;
 
-    return generate({...generateProps, extension: `module.${generateProps.data.cssType}`, templatePath: components["css"].path} )
+    return generate({...generateProps, extension: `module.${generateProps.data.cssType ?? "css"}`, templatePath: components["css"].path}, true)
 }
 
 function createIndex(generateProps: indexTemplateProps){
     const extension = generateProps.data.useTypescript ? "ts" : "js"
 
-    return generate({...generateProps, extension: extension, templatePath: components["index"].path, fileName:"index"} )
+    return generate({...generateProps, extension: extension, templatePath: components["index"].path, fileName:"index"}, true)
 }
 
 export default generateComponentsStructure;
