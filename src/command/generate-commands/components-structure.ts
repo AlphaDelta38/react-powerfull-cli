@@ -2,7 +2,7 @@ import { defaultCommander } from "@/default-commander.js";
 import generateComponentsStructure from "@/command/actions/g-components-action.js";
 
 function createComponentsStructure(){
-    return defaultCommander('component', ["disableInterface", "useTypescript", "disableCss", "folder"])
+    return defaultCommander('component', ["disableInterface", "useTypescript", "disableCss", "folder", "unpack"])
         .alias("ct")
         .argument('<name>', 'Component name')
         .description('create component folder structure with file-templates')

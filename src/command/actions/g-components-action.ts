@@ -16,8 +16,7 @@ import type { IBasicOptions } from "@/types/types.js";
 import createUseTypeScriptController from "@/command/priority-value-controllers/useTypeScript-controller.js";
 
 
-
-interface IOptions extends Pick<IBasicOptions, "folder" | "ds" | "useTypescript" | "di">{
+interface IOptions extends Pick<IBasicOptions, "folder" | "ds" | "useTypescript" | "di" | "unpack">{
     css: string;
     cpt: "fn" | "fc" | "fr";
 }
@@ -53,8 +52,8 @@ async function generateComponentsStructure(name: string, options: IOptions) {
         ...generateProps,
         data: filterObjectByKey(generateProps.data, [
             "componentType", "useInterface", "useCSS", "cssType", "componentType", "useTypescript"
-        ])
-    })
+        ]),
+    }, options["unpack"])
 
     /// generate css ///
     await createCSS({
@@ -62,7 +61,7 @@ async function generateComponentsStructure(name: string, options: IOptions) {
         data: filterObjectByKey(generateProps.data, [
             "useCSS", "cssType"
         ])
-    })
+    }, options["unpack"])
 
     /// generate index.ts ///
     await createIndex({
@@ -70,26 +69,26 @@ async function generateComponentsStructure(name: string, options: IOptions) {
         data: filterObjectByKey(generateProps.data, [
             "useTypescript",
         ])
-    })
+    }, options["unpack"])
 
 }
 
-function createTsx(generateProps: tsxTemplateProps){
+function createTsx(generateProps: tsxTemplateProps, unpack: boolean){
     const extension = generateProps.data.useTypescript ? "tsx" : "jsx"
 
-    return generate({...generateProps, extension: extension, templatePath: components["tsx"].path}, true)
+    return generate({...generateProps, extension: extension, templatePath: components["tsx"].path}, !unpack)
 }
 
-function createCSS(generateProps: cssTemplateProps){
+function createCSS(generateProps: cssTemplateProps, unpack: boolean){
     if(!generateProps.data.useCSS) return;
 
-    return generate({...generateProps, extension: `module.${generateProps.data.cssType ?? "css"}`, templatePath: components["css"].path}, true)
+    return generate({...generateProps, extension: `module.${generateProps.data.cssType ?? "css"}`, templatePath: components["css"].path}, !unpack)
 }
 
-function createIndex(generateProps: indexTemplateProps){
+function createIndex(generateProps: indexTemplateProps, unpack: boolean){
     const extension = generateProps.data.useTypescript ? "ts" : "js"
 
-    return generate({...generateProps, extension: extension, templatePath: components["index"].path, fileName:"index"}, true)
+    return generate({...generateProps, extension: extension, templatePath: components["index"].path, fileName:"index"}, !unpack)
 }
 
 export default generateComponentsStructure;

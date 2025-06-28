@@ -6,6 +6,7 @@ export type FromUtoI<U> = (U extends any ? (k: U)=> void : never) extends (k: in
 
 export interface IBasicOptions{
     useTypescript: boolean;
+    unpack: boolean
     folder: string;
     ds: boolean;
     di: boolean;

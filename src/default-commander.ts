@@ -32,7 +32,12 @@ const defaultOptions = {
         description: "Enter the path to the directory for create file(s) (path must started from root directory but without root/)",
         defaultValue: null
     },
-
+    unpack: {
+        shortFlag: "u",
+        longFlag: "unpack",
+        description: "turn this flag for unpack from basic folder",
+        defaultValue: false
+    },
 }
 
 type propsType = keyof typeof defaultOptions;
