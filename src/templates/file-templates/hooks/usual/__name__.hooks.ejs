@@ -3,7 +3,8 @@ const hooks = ['useEffect'];
 if (usePrev || useClickOut) hooks.push('useRef')
 if (useDeb || useToggle) hooks.push('useState');
 -%>
-import React, { <%= hooks.join(', ') %> } from 'react';
+import * as React from 'react';
+import { <%= hooks.join(', ') %> } from 'react';
 
 <% if (usePrev) { %>
 <%- include('partials/usePrevious', { useTypescript }) %>
