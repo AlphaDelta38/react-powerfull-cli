@@ -1,6 +1,6 @@
 import generate from "@/templates/generate.js";
 
-import { filterObjectByKey } from "@/utils/utils.js";
+import { filterObjectByKey, getDirByName } from "@/utils/utils.js";
 import { GeneralConfigManager } from "@/utils/config-utils.js";
 import { capitalizeFirstLetter } from "@/utils/text-utils.js";
 import { components } from "@/constants/template-paths.js";
@@ -11,21 +11,19 @@ import type {
     tsxTemplateProps,
     componentsAllDataTypes, generateTypesForAction
 } from "@/templates/types/components.js";
+import type { IBasicOptions } from "@/types/types.js";
 
 import createUseTypeScriptController from "@/command/priority-value-controllers/useTypeScript-controller.js";
 
 
 
-interface IOptions{
-    useTypescript: boolean;
+interface IOptions extends Pick<IBasicOptions, "folder" | "ds" | "useTypescript" | "di">{
     css: string;
-    ds: boolean;
-    di: boolean;
     cpt: "fn" | "fc" | "fr";
 }
 
 async function generateComponentsStructure(name: string, options: IOptions) {
-    const componentDirPath: string = GeneralConfigManager.extractPaths(["components"])[0];
+    const componentDirPath: string = options["folder"] ?? getDirByName(["components"], 0);
 
     const typeScriptController = createUseTypeScriptController()
     typeScriptController.placeAt(options["useTypescript"], 1)

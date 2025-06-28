@@ -5,6 +5,7 @@ import { hooks } from "@/constants/template-paths.js";
 import generate from "@/templates/generate.js";
 
 import type { usualHooksTemplateProps } from "@/templates/types/hooks.js";
+import type { IBasicOptions } from "@/types/types.js";
 
 import createUseTypeScriptController from "@/command/priority-value-controllers/useTypeScript-controller.js";
 
@@ -12,14 +13,13 @@ import createUseTypeScriptController from "@/command/priority-value-controllers/
 const { __dirname } = getDirname(import.meta.url);
 
 
-interface IOptions{
-    useTypescript: boolean;
+interface IOptions extends Pick<IBasicOptions, "useTypescript" | "folder">{
     pick: string[] | undefined
     exclude: string[] | undefined
 }
 
 async function generateUsualHooks(options: IOptions){
-    const componentDirPath: string = getDirByName(["hooks"], 0)
+    const componentDirPath: string = options["folder"] ?? getDirByName(["hooks"], 0)
 
     const typeScriptController = createUseTypeScriptController()
     typeScriptController.placeAt(options["useTypescript"], 1)

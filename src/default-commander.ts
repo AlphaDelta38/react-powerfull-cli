@@ -26,6 +26,12 @@ const defaultOptions = {
         description: "Just write flag that dont include interface",
         defaultValue: false
     },
+    folder: {
+        shortFlag: "f",
+        longFlag: "folder <path>",
+        description: "Enter the path to the directory for create file(s) (path must started from root directory but without root/)",
+        defaultValue: null
+    },
 
 }
 

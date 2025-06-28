@@ -1,21 +1,19 @@
-import { GeneralConfigManager } from "@/utils/config-utils.js";
-import { filterObjectByKey } from "@/utils/utils.js";
+import { filterObjectByKey, getDirByName } from "@/utils/utils.js";
 import { toCamelCase } from "@/utils/text-utils.js";
 import { hooks } from "@/constants/template-paths.js";
 import generate from "@/templates/generate.js";
 
 import type { customHookTemplateProps } from "@/templates/types/hooks.js";
+import type { IBasicOptions } from "@/types/types.js";
 
 import createUseTypeScriptController from "@/command/priority-value-controllers/useTypeScript-controller.js";
 
 
-interface IOptions{
-    useTypescript: boolean;
-    di: boolean;
+interface IOptions extends Pick<IBasicOptions, "useTypescript" | "di" | "folder">{
 }
 
 async function generateHook(name:string, options: IOptions){
-    const componentDirPath: string = GeneralConfigManager.extractPaths(["hooks"])[0];
+    const componentDirPath: string = options["folder"] ?? getDirByName(["hooks"], 0);
 
     const typeScriptController = createUseTypeScriptController()
     typeScriptController.placeAt(options["useTypescript"], 1)

@@ -5,7 +5,7 @@ import generateUsualHooks from "@/command/actions/g-hooks-action.js";
 const variant = `variants:  ${hooksConstant.join(" / ")}`
 
 function createUsualHooks(){
-    return defaultCommander("hooks", ["useTypescript"])
+    return defaultCommander("hooks", ["useTypescript", "folder"])
         .alias("hks")
         .description('generate often used hooks')
         .option("-p, --pick <hooks...>", `Pick multiple hooks  ${variant}`, undefined)
