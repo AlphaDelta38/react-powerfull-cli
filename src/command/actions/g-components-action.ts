@@ -12,10 +12,12 @@ import type {
     componentsAllDataTypes, generateTypesForAction
 } from "@/templates/types/components.js";
 
+import createUseTypeScriptController from "@/command/priority-value-controllers/useTypeScript-controller.js";
+
 
 
 interface IOptions{
-    disableTypescript: boolean;
+    useTypescript: boolean;
     css: string;
     ds: boolean;
     di: boolean;
@@ -24,7 +26,11 @@ interface IOptions{
 
 async function generateComponentsStructure(name: string, options: IOptions) {
     const componentDirPath: string = GeneralConfigManager.extractPaths(["components"])[0];
-    const useTypescript: boolean = options["disableTypescript"] ? false : GeneralConfigManager.read()?.useTypescript ?? true;
+
+    const typeScriptController = createUseTypeScriptController()
+    typeScriptController.placeAt(options["useTypescript"], 1)
+
+    const useTypescript: boolean = typeScriptController.get()
     const cssType = options.css ?? GeneralConfigManager.read()["css-type"]
 
     const generateData: componentsAllDataTypes = {

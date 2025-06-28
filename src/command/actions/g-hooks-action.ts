@@ -1,24 +1,30 @@
 import path from "node:path";
-import { getDirByName, getUserTypescript } from "@/command/helpers/helpers.js";
-import {filterObjectByKey, getDirname} from "@/utils/utils.js";
+import { filterObjectByKey, getDirname, getDirByName } from "@/utils/utils.js";
 import { hooksConstant, hookConstantAlias } from "@/constants/constants.js";
 import { hooks } from "@/constants/template-paths.js";
 import generate from "@/templates/generate.js";
 
 import type { usualHooksTemplateProps } from "@/templates/types/hooks.js";
 
+import createUseTypeScriptController from "@/command/priority-value-controllers/useTypeScript-controller.js";
+
+
 const { __dirname } = getDirname(import.meta.url);
 
 
 interface IOptions{
-    disableTypescript: boolean;
+    useTypescript: boolean;
     pick: string[] | undefined
     exclude: string[] | undefined
 }
 
 async function generateUsualHooks(options: IOptions){
     const componentDirPath: string = getDirByName(["hooks"], 0)
-    const useTypescript: boolean = getUserTypescript(options)
+
+    const typeScriptController = createUseTypeScriptController()
+    typeScriptController.placeAt(options["useTypescript"], 1)
+
+    const useTypescript: boolean = typeScriptController.get()
 
     const { data }: Pick<usualHooksTemplateProps, "data"> = {
         data:{

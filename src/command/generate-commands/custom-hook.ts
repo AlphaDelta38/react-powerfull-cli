@@ -2,7 +2,7 @@ import { defaultCommander } from "@/default-commander.js";
 import generateHook from "@/command/actions/g-hook-action.js";
 
 function createCustomHook(){
-    return defaultCommander('hook', ["disableInterface", "disableTypescript"])
+    return defaultCommander('hook', ["disableInterface", "useTypescript"])
         .alias("hk")
         .argument('<name>', 'Hook name')
         .description('generate Hook by name with from file-templates')

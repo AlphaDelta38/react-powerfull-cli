@@ -38,39 +38,21 @@ function getDirname(metaUrl: string) {
     return { __filename, __dirname };
 }
 
-function priorityQueue(queue: (boolean | string)[]): boolean | any{
-    const config = GeneralConfigManager.read()
+/// Overload ///
+function getDirByName(names: string[], index: number): string;
+function getDirByName(names: string[], index?: undefined): string[];
+/// Overload ///
 
-    for (const queueElement of queue) {
-        if(typeof queueElement === 'boolean' && queueElement) return true;
-
-        if(typeof queueElement === "string" && !queueElement.includes("/") && isExist(queueElement)) return queueElement;
-
-        if(typeof queueElement === "string" && queueElement.includes("/")){
-            const keys = queueElement.split("/");
-            let result = config;
-
-            for (const key of keys) {
-                if (result == null || !(key in result)) break;
-                result = result[key];
-            }
-
-            if (isExist(result)) {
-                return result;
-            }
-
-        }
-
-    }
-
-    return false;
+function getDirByName(names: string[], index?: number): string[] | string {
+    const componentDirPath: string[] = GeneralConfigManager.extractPaths(names);
+    return index !== undefined ? componentDirPath[index] : componentDirPath;
 }
 
 export {
     isExist,
     isObject,
     getDirname,
-    priorityQueue,
+    getDirByName,
     filterObjectByKey
 }
 

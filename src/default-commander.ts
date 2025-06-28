@@ -8,11 +8,11 @@ interface IDefaultOptions{
 }
 
 const defaultOptions = {
-    disableTypescript: {
+    useTypescript: {
         shortFlag: "t",
-        longFlag: "disable-typescript",
-        description: "Switch to javascript extension within creating current template",
-        defaultValue: false
+        longFlag: "useTypescript <boolean>",
+        description: "Opportunity to set false, for create js file without ts syntax",
+        defaultValue: null
     },
     disableCss: {
         shortFlag: "c",

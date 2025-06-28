@@ -6,14 +6,21 @@ import generate from "@/templates/generate.js";
 
 import type { customHookTemplateProps } from "@/templates/types/hooks.js";
 
+import createUseTypeScriptController from "@/command/priority-value-controllers/useTypeScript-controller.js";
+
+
 interface IOptions{
-    disableTypescript: boolean;
+    useTypescript: boolean;
     di: boolean;
 }
 
 async function generateHook(name:string, options: IOptions){
     const componentDirPath: string = GeneralConfigManager.extractPaths(["hooks"])[0];
-    const useTypescript: boolean = options["disableTypescript"] ? false : GeneralConfigManager.read()?.useTypescript ?? true;
+
+    const typeScriptController = createUseTypeScriptController()
+    typeScriptController.placeAt(options["useTypescript"], 1)
+
+    const useTypescript: boolean = typeScriptController.get()
 
     const { data } : Pick<customHookTemplateProps, "data"> = {
         data: {
