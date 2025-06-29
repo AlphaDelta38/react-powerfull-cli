@@ -18,6 +18,7 @@ import createUseTypeScriptController from "@/command/priority-value-controllers/
 
 interface IOptions extends Pick<IBasicOptions, "folder" | "ds" | "useTypescript" | "di" | "unpack">{
     css: string;
+    withIndex: boolean;
     cpt: "fn" | "fc" | "fr";
 }
 
@@ -69,7 +70,7 @@ async function generateComponentsStructure(name: string, options: IOptions) {
         data: filterObjectByKey(generateProps.data, [
             "useTypescript",
         ])
-    }, options["unpack"])
+    }, options["unpack"], options["withIndex"])
 
 }
 
@@ -85,7 +86,9 @@ function createCSS(generateProps: cssTemplateProps, unpack: boolean){
     return generate({...generateProps, extension: `module.${generateProps.data.cssType ?? "css"}`, templatePath: components["css"].path}, !unpack)
 }
 
-function createIndex(generateProps: indexTemplateProps, unpack: boolean){
+function createIndex(generateProps: indexTemplateProps, unpack: boolean, offCreate: boolean){
+    if(offCreate) return;
+
     const extension = generateProps.data.useTypescript ? "ts" : "js"
 
     return generate({...generateProps, extension: extension, templatePath: components["index"].path, fileName:"index"}, !unpack)
